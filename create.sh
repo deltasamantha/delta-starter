@@ -37,8 +37,8 @@
 set -euo pipefail
 
 VERSION="1.0.0"
-REPO_URL="https://github.com/<USER>/delta-starter.git"
-REPO_BRANCH="main"
+REPO_URL="https://github.com/deltasamantha/delta-starter.git"
+REPO_BRANCH="master"
 
 # ─── Colors ─────────────────────────────────────────────────────
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'
