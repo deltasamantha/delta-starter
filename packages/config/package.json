@@ -1,0 +1,13 @@
+{
+  "name": "__SCOPE__/config",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    "./eslint": "./eslint/base.js",
+    "./tsconfig/base": "./tsconfig/base.json",
+    "./tsconfig/nextjs": "./tsconfig/nextjs.json",
+    "./tsconfig/react-native": "./tsconfig/react-native.json",
+    "./tsconfig/node": "./tsconfig/node.json",
+    "./tsconfig/library": "./tsconfig/library.json"
+  }
+}

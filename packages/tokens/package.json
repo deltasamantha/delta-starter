@@ -1,0 +1,23 @@
+{
+  "name": "__SCOPE__/tokens",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./tamagui.config": "./src/tamagui.config.ts"
+  },
+  "dependencies": {
+    "tamagui": "^1.144.0",
+    "@tamagui/config": "^1.144.0",
+    "@tamagui/core": "^1.144.0",
+    "@tamagui/font-inter": "^1.144.0",
+    "@tamagui/shorthands": "^1.144.0",
+    "@tamagui/animations-css": "^1.144.0",
+    "@tamagui/react-native-media-driver": "^1.144.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}

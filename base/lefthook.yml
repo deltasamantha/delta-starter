@@ -1,0 +1,22 @@
+# =============================================================================
+# __DISPLAY_NAME__ — Lefthook Config (Git Hooks)
+# =============================================================================
+# Install: pnpm add -Dw lefthook && npx lefthook install
+# =============================================================================
+
+pre-commit:
+  parallel: true
+  commands:
+    lint:
+      glob: "*.{ts,tsx,js,jsx}"
+      run: pnpm lint
+    format:
+      glob: "*.{ts,tsx,js,jsx,json,md}"
+      run: pnpm format
+    typecheck:
+      run: pnpm type-check
+
+pre-push:
+  commands:
+    build:
+      run: pnpm build

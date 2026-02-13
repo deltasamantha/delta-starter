@@ -1,0 +1,9 @@
+{
+  "extends": "__SCOPE__/config/tsconfig/library",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "jsx": "react-jsx"
+  },
+  "include": ["src"]
+}

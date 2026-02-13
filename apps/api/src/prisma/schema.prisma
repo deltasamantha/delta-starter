@@ -1,0 +1,226 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  worker
+  employer
+  admin
+}
+
+enum JobStatus {
+  draft
+  published
+  closed
+  filled
+  cancelled
+}
+
+enum JobType {
+  full_time
+  part_time
+  contract
+  temporary
+  per_diem
+}
+
+enum ApplicationStatus {
+  pending
+  reviewed
+  shortlisted
+  accepted
+  rejected
+  withdrawn
+}
+
+enum ShiftStatus {
+  scheduled
+  in_progress
+  completed
+  cancelled
+  no_show
+}
+
+enum Availability {
+  available
+  limited
+  unavailable
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  passwordHash  String
+  firstName     String
+  lastName      String
+  phone         String?
+  role          UserRole
+  avatarUrl     String?
+  isVerified    Boolean   @default(false)
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  workerProfile  WorkerProfile?
+  companies      Company[]
+  applications   Application[]
+  shiftsAsWorker Shift[]
+  reviewsGiven   Review[]       @relation("ReviewsGiven")
+  reviewsReceived Review[]      @relation("ReviewsReceived")
+  notifications  Notification[]
+
+  @@map("users")
+}
+
+model WorkerProfile {
+  id                 String       @id @default(uuid())
+  userId             String       @unique
+  user               User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  headline           String?
+  bio                String?
+  skills             Json         @default("[]") // Array of { name, level }
+  hourlyRate         Float?
+  availability       Availability @default(available)
+  location           String?
+  latitude           Float?
+  longitude          Float?
+  radiusKm           Int          @default(50)
+  documentsVerified  Boolean      @default(false)
+  rating             Float        @default(0)
+  totalJobsCompleted Int          @default(0)
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  @@map("worker_profiles")
+}
+
+model Company {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  industry    String?
+  logoUrl     String?
+  website     String?
+  address     String?
+  isVerified  Boolean  @default(false)
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  jobs Job[]
+
+  @@map("companies")
+}
+
+model Job {
+  id           String    @id @default(uuid())
+  companyId    String
+  company      Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  title        String
+  description  String
+  requirements Json      @default("[]")
+  skills       Json      @default("[]")
+  jobType      JobType
+  status       JobStatus @default(draft)
+  hourlyRateMin Float
+  hourlyRateMax Float
+  location     String
+  isRemote     Boolean   @default(false)
+  latitude     Float?
+  longitude    Float?
+  startDate    DateTime?
+  endDate      DateTime?
+  slotsTotal   Int       @default(1)
+  slotsFilled  Int       @default(0)
+  isUrgent     Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  applications Application[]
+  shifts       Shift[]
+
+  @@index([status])
+  @@index([companyId])
+  @@index([jobType])
+  @@map("jobs")
+}
+
+model Application {
+  id           String            @id @default(uuid())
+  jobId        String
+  job          Job               @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  workerId     String
+  worker       User              @relation(fields: [workerId], references: [id])
+  status       ApplicationStatus @default(pending)
+  coverNote    String?
+  proposedRate Float?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  @@unique([jobId, workerId])
+  @@index([jobId])
+  @@index([workerId])
+  @@map("applications")
+}
+
+model Shift {
+  id           String      @id @default(uuid())
+  jobId        String
+  job          Job         @relation(fields: [jobId], references: [id])
+  workerId     String
+  worker       User        @relation(fields: [workerId], references: [id])
+  date         DateTime
+  startTime    String
+  endTime      String
+  status       ShiftStatus @default(scheduled)
+  clockInTime  DateTime?
+  clockOutTime DateTime?
+  breakMinutes Int         @default(0)
+  totalHours   Float?
+  hourlyRate   Float
+  totalPay     Float?
+  notes        String?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@index([workerId])
+  @@index([jobId])
+  @@index([date])
+  @@map("shifts")
+}
+
+model Review {
+  id         String   @id @default(uuid())
+  reviewerId String
+  reviewer   User     @relation("ReviewsGiven", fields: [reviewerId], references: [id])
+  revieweeId String
+  reviewee   User     @relation("ReviewsReceived", fields: [revieweeId], references: [id])
+  jobId      String
+  rating     Int
+  comment    String?
+  createdAt  DateTime @default(now())
+
+  @@unique([reviewerId, revieweeId, jobId])
+  @@map("reviews")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  title     String
+  body      String
+  data      Json?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId, isRead])
+  @@map("notifications")
+}
