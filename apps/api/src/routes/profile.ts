@@ -1,6 +1,6 @@
-import { Router, type IRouter } from 'express'
+import { Router } from 'express'
 
-export const profileRouter: IRouter = Router()
+export const profileRouter = Router()
 
 profileRouter.get('/', async (_req, res) => {
   res.json({ success: true, data: { message: 'Profile endpoint' } })
