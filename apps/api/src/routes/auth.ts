@@ -1,7 +1,7 @@
-import { Router } from 'express'
+import { Router, type IRouter } from 'express'
 import { RegisterSchema, LoginSchema } from '__SCOPE__/shared'
 
-export const authRouter = Router()
+export const authRouter: IRouter = Router()
 
 authRouter.post('/register', async (req, res, next) => {
   try {

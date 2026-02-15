@@ -109,10 +109,10 @@ EOF
     SCHEMA_NAME="$(echo "${NAME}" | sed 's/s$//' | sed 's/./\U&/')"
 
     cat > "$ROUTE_FILE" << EOF
-import { Router } from 'express'
+import { Router, type IRouter } from 'express'
 // import { Create${SCHEMA_NAME}Schema } from '__SCOPE__/shared'
 
-export const ${NAME}Router = Router()
+export const ${NAME}Router: IRouter = Router()
 
 // GET /${NAME}
 ${NAME}Router.get('/', async (req, res, next) => {

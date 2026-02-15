@@ -1,4 +1,4 @@
-import express from 'express'
+import express, { type Express } from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
 import compression from 'compression'
@@ -10,7 +10,7 @@ import { profileRouter } from './routes/profile.js'
 import { errorHandler } from './middleware/errorHandler.js'
 import { requestLogger } from './middleware/requestLogger.js'
 
-const app = express()
+const app: Express = express()
 const PORT = process.env.PORT || 3001
 
 // Global middleware
