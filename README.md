@@ -8,7 +8,7 @@ Supports any combination of **Next.js 16** + **React Native (Expo)** + **Express
 
 ```bash
 # Interactive (prompts for choices)
-bash <(curl -fsSL https://raw.githubusercontent.com/<USER>/delta-starter/main/create.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/deltasamantha/delta-starter/master/create.sh)
 
 # With project name
 bash <(curl -fsSL .../create.sh) my-saas-app

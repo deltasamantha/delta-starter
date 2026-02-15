@@ -1,8 +1,8 @@
-import { Router } from 'express'
+import { Router, type IRouter } from 'express'
 import { CreateJobSchema } from '__SCOPE__/shared'
 import { calculateMatchScore } from '__SCOPE__/business-logic'
 
-export const jobsRouter = Router()
+export const jobsRouter: IRouter = Router()
 
 jobsRouter.get('/', async (req, res, next) => {
   try {
