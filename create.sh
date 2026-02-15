@@ -220,9 +220,11 @@ packages:
   - "packages/*"
 EOF
 
-cat > package.json << PKG
-{ "name": "${PROJECT_SLUG}", "private": true, "scripts": {}, "packageManager": "pnpm@$(pnpm -v)" }
-PKG
+PNPM_VER=$(pnpm -v)
+node -e "
+const pkg = { name: process.argv[1], private: true, scripts: {}, packageManager: 'pnpm@' + process.argv[2] };
+require('fs').writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+" "$PROJECT_SLUG" "$PNPM_VER"
 
 info "Installing turbo, typescript, prettier..."
 pnpm add -Dw turbo@latest typescript@latest prettier@latest lefthook@latest 2>&1 | tail -1
